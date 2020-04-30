@@ -125,3 +125,19 @@ plot(shock.Time, shock.Data);
 legend('Reconstructed', 'Original');
 ```
 <img src='readme/compare.png'  width='600'/>
+
+## Citation
+If you find this study useful for your research, please cite:
+```
+@article{yan2020general,
+  title={A general shock waveform and characterisation method},
+  author={Yan, Yinzhong and Li, QM},
+  journal={Mechanical Systems and Signal Processing},
+  volume={136},
+  pages={106508},
+  year={2020},
+}
+```
+
+## Contact
+Feel free to contact me at [yinzhong.yan@manchester.ac.uk](mailto:yinzhong.yan@manchester.ac.uk).
