@@ -38,7 +38,29 @@ Helps can be accessed by `help acc` in MATLAB's command window.
 >    extend - Extending the time series for a certain period.
 
 The 'acc.fit' method is for shock waveform decomposition.
-For help for a specific method, please use `help acc.fit`, for example.
+Once the 'acc.fit' completes successfully, the decomposed results will be in the form of an 'swd' object.
+Specifically, the 'swd' is a class to post-process and visualize shock waveform components.
+
+## Example
+
+Consider a provided mechanical shock signal directly measured from an accelerometer.
+Import the provided data and construct an 'acc' object.
+Use provided pre-processing methods to detrend, capture, align, resample and view the measurement signal.
+
+```
+load('measurement.mat');
+shock = acc([t,y]);
+shock = shock.detrend('constant');
+shock = shock.getsampleusingtime(0.019, 0.099);
+shock.Time = shock.Time - shock.Time(1);
+shock = shock. resample1(4000);
+shock.plot;
+```
+
+<img src='readme/measurement.png'  width='600'/>
+
+Decompose the measurement into shock waveform components with 'acc.fit' method.
+Help for specific methods, e.g. 'acc.fit', can be accessed by `help acc.fit`, for example.
 
 > SWD=fit(Acc, Name, Value) returns the object of shock waveform decomposition results.
 > Optional name-value pair arguments can be added.
@@ -62,21 +84,44 @@ For help for a specific method, please use `help acc.fit`, for example.
 >    'PhiNum' - How many start points considered for phase.  
 >    2 (default) | Positive scalar  
 
-Once the 'acc.fit' completes successfully, the decomposed results will be in the form of an 'swd' object.
-Specifically, the 'swd' is a class to post-process and visualize shock waveform components.
-
-## Example
-
-Consider a provided mechanical shock signal directly measured from an accelerometer.
-Import the provided data and construct an 'acc' object.
-Use provided pre-processing methods to detrend, capture, align, resample and view the measurement signal.
+There are many parameters that can control the performance of the decomposition algorithm, by adjusting starting points.
+Instructions for the algorithm should be given in the form of name-value pairs, as explained in the help documents.
+Detail explanations for choosing these parameters can be found in section 3 in the paper.
+In this example, we can use default parameters without giving any name-value pairs.
 ```
-load('measurement.mat');
-shock = acc([t,y]);
-shock = shock.detrend('constant');
-shock = shock.getsampleusingtime(0.019, 0.069)
-shock = setuniformtime(shock,'StartTime',0);
-shock = shock. resample1(4000);
-shock.plot;
+results = shock.fit;
 ```
-![measurement](readme/measurement.png)
+Best objective function values will be plotted during the operation of algorithm.
+This process may take several minutes in a common desktop PC.
+The shock waveform components 'results' will be returned in as a 'swd' object.
+The 'swd' object provide several methods for the post-processing of shock wavefrom components.
+A table can be created to view all parameter of decomposed wavefroms.
+```
+tab = results.table;
+```
+
+| Amplitude | Frequency_Hz | t0_ms | tau_ms | zeta | varphi | epsilon | kappa |
+|-----|-----|-----|-----|-----|-----|-----|-----|
+| 1803.5| 4436.9 | 1.121 | 5.747 | 0.008 | 3.452 | 69.429 | 25.497 |
+| 587.34 | 2829.4 | 1.207 | 8.189 | 0.007 | 1.548 | 12.089 | 23.169 |
+| 272.58 | 123.4 | 0 | 32.082 | 0.053 | 1.94 | 8.008 | 3.959 |
+| 320.94 | 702.53 | 1.32 | 5.116 | 0.011 | 5.839 | 5.005 | 3.594 |
+| 180.78 | 998.75 | 3.521 | 0.089 | 0.004 | 6.13 | 1.379 | 0.089 |
+| 113.57 | 837.92 | 1.56 | 1.939 | 0.007 | 5.55 | 0.558 | 1.624 |
+
+Plot of each individual shock waveform component can also be viewed in a subplot environment.
+
+```
+results.subplot;
+```
+<img src='readme/subplot.png'  width='600'/>
+
+Reconstruct a signal with these decomposed shock waveform components, and compare it to the original shock measurement.
+```
+reconstructed = results.yhat;
+reconstructed.plot;
+hold on;
+plot(shock.Time, shock.Data);
+legend('Reconstructed', 'Original');
+```
+<img src='readme/compare.png'  width='600'/>

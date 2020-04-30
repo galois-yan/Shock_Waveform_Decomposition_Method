@@ -78,7 +78,7 @@ classdef swd
         end
         
         function T=table(obj)
-            xmulti=[obj.x, obj.energyRatio, obj.kappa, obj.n];
+            xmulti=[obj.x, obj.energyRatio, obj.kappa];
             
             varphi=rem(xmulti(:,6),2*pi);
             varphi(varphi<0)=varphi(varphi<0)+2*pi; %#ok<*PROP>
@@ -90,7 +90,7 @@ classdef swd
             
             xmulti=round(xmulti,3);
             T=array2table(xmulti,'VariableNames',{'Amplitude','Frequency_Hz',...
-                't0_ms','tau_ms','zeta','varphi','epsilon','kappa','n',});
+                't0_ms','tau_ms','zeta','varphi','epsilon','kappa',});
             
         end
         

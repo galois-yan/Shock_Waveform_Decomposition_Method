@@ -142,7 +142,7 @@ classdef acc < timeseries
             %   0.1 (default) | Scalar between (0, 1)
             %
             %   'MinSW' - Minimum shock wavefrom components
-            %   5 (default) | Positive scalar
+            %   6 (default) | Positive scalar
             %
             %   'XiList' - Start points of damping ratios.
             %   logspace(-2,1,4) (default) | row vector
@@ -156,13 +156,12 @@ classdef acc < timeseries
             addParameter(p,'IniTim', 0);
             addParameter(p,'TwoWay', 0);
             addParameter(p,'ErrTol', 0.1);
-            addParameter(p,'MinSW', 5);
+            addParameter(p,'MinSW', 6);
             addParameter(p,'XiList', logspace(-2,1,4));
             addParameter(p,'PhiNum', 2);
             parse(p,varargin{:});
             
             disp(p.Results);
-            pause;
             
             Acc.Time=Acc.Time-Acc.Time(1);
             Acc.Data=Acc.Data-Acc.mean;
