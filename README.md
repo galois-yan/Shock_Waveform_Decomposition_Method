@@ -1,7 +1,9 @@
-# Shock_Waveform_Decomposition_Method
+# Shock Waveform Decomposition Method
 Code for the paper entitled "A general shock waveform and characterisation method".
 This algorithm can decompose a mechanical shock measurement into several shock waveform components.
-Please read the paper for more details.
+The method was keeping improved and debugged even after article acceptance.
+Therefore the results coming from this algorithm may be slightly different from the results shown in the paper, although the algorithms are essentially the same.
+Please read [the paper](https://www.sciencedirect.com/science/article/pii/S0888327019307290?via%3Dihub) for more details.
 
 ## Disclaimer
 This software is published for academic and non-commercial use only.
@@ -23,47 +25,58 @@ Helps can be accessed by `help acc` in MATLAB's command window.
 >    Length - Length of time series
 >
 >acc Methods:  
-    acc - Constructor method to creat a acc object.  
-    resample1 - Resample a time series.  
-    bandpass - A bandpass filter.  
-    plot - An overload plot function for acc object.  
-    fft - An overload fast fourier transform function for acc object.  
-    fit - Shock waveform decomposition method.  
-    cwt - An overload continues wavelet transform plot.  
-    dwt - An overload discrete wavelet transform plot.  
-    cumtraapz - Overload numerical integration.  
-    diff - Overload numerical difference.  
-    extend - Extending the time series for a certain period.  
+>    acc - Constructor method to create a acc object.  
+>    resample1 - Resample a time series.  
+>    bandpass - A bandpass filter.  
+>    plot - An overload plot function for acc object.  
+>    fft - An overload fast Fourier transform function for acc object.  
+>    fit - Shock waveform decomposition method.  
+>    cwt - An overload continues wavelet transform plot.  
+>    dwt - An overload discrete wavelet transform plot.  
+>    cumtraapz - Overload numerical integration.  
+>    diff - Overload numerical difference.  
+>    extend - Extending the time series for a certain period.
 
 The 'acc.fit' method is for shock waveform decomposition.
 For help for a specific method, please use `help acc.fit`, for example.
 
->SWD=fit(Acc, Name, Value) retures the object of shock waveform
- decomposition results. Optional name-value pair arguments can
- be added.
+> SWD=fit(Acc, Name, Value) returns the object of shock waveform decomposition results.
+> Optional name-value pair arguments can be added.
 >
-> Name-Value Pairs:
->    'FreSpace' - Spacing of frequenciey start points;
->    2 (default) | Positive scalar
->
->    'IniTim' - Start point of initial time.
->    0 (default) | Row vector
->
->    'TauLoc' - Start points of peak times.
->    [0.6,1,1.4] (default) | Row vector
->
+> Name-Value Pairs:  
+>    'FreSpace' - Spacing of frequencies start points;  
+>    2 (default) | Positive scalar  
+>    'IniTim' - Start point of initial time.  
+>    0 (default) | Row vector  
+>    'TauLoc' - Start points of peak times.  
+>    [0.6,1,1.4] (default) | Row vector  
 >    'TwoWay' - Whether consider the situation with negative
->    peak time. '0' for 'No', and '1' for 'Yes'.
->    0 (default) | 1
->
->    'ErrTol' - The tolerance of error energy ratio.
->    0.1 (default) | Scalar between (0, 1)
->
->    'MinSW' - Minimum shock wavefrom components
->    5 (default) | Positive scalar
->
->    'XiList' - Start points of damping ratios.
->    logspace(-2,1,4) (default) | row vector
->
->    'PhiNum' - How many start points considered for phase.
->    2 (default) | Positive scalar
+>    peak time. '0' for 'No', and '1' for 'Yes'.  
+>    0 (default) | 1  
+>    'ErrTol' - The tolerance of error energy ratio.  
+>    0.1 (default) | Scalar between (0, 1)  
+>    'MinSW' - Minimum shock waveform components  
+>    5 (default) | Positive scalar  
+>    'XiList' - Start points of damping ratios.  
+>    logspace(-2,1,4) (default) | row vector  
+>    'PhiNum' - How many start points considered for phase.  
+>    2 (default) | Positive scalar  
+
+Once the 'acc.fit' completes successfully, the decomposed results will be in the form of an 'swd' object.
+Specifically, the 'swd' is a class to post-process and visualize shock waveform components.
+
+## Example
+
+Consider a provided mechanical shock signal directly measured from an accelerometer.
+Import the provided data and construct an 'acc' object.
+Use provided pre-processing methods to detrend, capture, align, resample and view the measurement signal.
+```
+load('measurement.mat');
+shock = acc([t,y]);
+shock = shock.detrend('constant');
+shock = shock.getsampleusingtime(0.019, 0.069)
+shock = setuniformtime(shock,'StartTime',0);
+shock = shock. resample1(4000);
+shock.plot;
+```
+![measurement](readme/measurement.png)
