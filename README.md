@@ -140,4 +140,4 @@ If you find this study useful for your research, please cite:
 ```
 
 ## Contact
-Feel free to contact me at [yinzhong.yan@manchester.ac.uk](mailto:yinzhong.yan@manchester.ac.uk).
+Feel free to contact me at [yinzhong.yan@nwpu.edu.cn](mailto:yinzhong.yan@nwpu.edu.cn).
